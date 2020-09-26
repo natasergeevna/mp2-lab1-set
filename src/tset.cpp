@@ -62,12 +62,16 @@ int TSet::operator==(const TSet &s) const // сравнение
 {
     if (BitField == s.BitField)
         return 1;
+    else
+        return 0;
 }
 
 int TSet::operator!=(const TSet &s) const // сравнение
 {
     if (BitField != s.BitField)
         return 1;
+    else
+        return 0;
 }
 
 TSet TSet::operator+(const TSet &s) // объединение
@@ -105,14 +109,33 @@ TSet TSet::operator~(void) // дополнение
 istream &operator>>(istream &istr, TSet &s) // ввод
 {
     int tmp;
-    cin >> tmp;
-    for (; ((tmp > -1) && (tmp < s.MaxPower)); cin >> tmp)
-      s.BitField.SetBit(tmp);
+    char ch;
+    while (ch != '{')
+    {
+        istr >> ch;
+    }
+    while (ch != '}')
+    {
+        istr >> tmp;
+        s.InsElem(tmp);
+        while ((ch != ',') && (ch != '}'));
+        {
+            istr >> ch;
+        }
+    }
     return istr;
 }
 
 ostream& operator<<(ostream &ostr, const TSet &s) // вывод
 {
-    ostr << s.BitField << " ";
+    ostr << "{";
+    for (int i = 0; i < s.GetMaxPower(); i++)
+    {
+        if (s.IsMember(i))
+        {
+            ostr << i << ", ";
+        }
+    }
+    ostr << "}";
     return ostr;
 }

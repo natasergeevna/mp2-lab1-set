@@ -7,6 +7,9 @@
 
 #include "tbitfield.h"
 #include <string>
+#include <exception>
+
+using namespace std;
 
 TBitField::TBitField(int len)
 {
@@ -18,7 +21,7 @@ TBitField::TBitField(int len)
             pMem[i] = 0;
     }
     else
-        throw "некорректная верхняя граница";
+        throw logic_error("Input error: incorrect length of BitField in constructor");
 
 }
 
@@ -41,12 +44,12 @@ int TBitField::GetMemIndex(const int n) const // индекс Мем для би
     if (n > -1 && n < BitLen)
         return(n / (sizeof(TELEM) * 8));
     else
-        throw "некоректный бит";
+        throw logic_error("Input error: incorrect bit length");
 }
 
 TELEM TBitField::GetMemMask(const int n) const // битовая маска для бита n
 {
-    return (1 << (n - GetMemIndex(n) * sizeof(TELEM) * 8));
+    return (1 << (n - 1) % (sizeof(TELEM) * 8));
 }
 
 // доступ к битам битового поля
@@ -61,7 +64,7 @@ void TBitField::SetBit(const int n) // установить бит
     if (n > -1 && n < BitLen)
         pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] | GetMemMask(n);
     else
-        throw "некорректный бит";
+        throw logic_error("Input error: incorrect bit length");
 }
 
 void TBitField::ClrBit(const int n) // очистить бит
@@ -69,18 +72,20 @@ void TBitField::ClrBit(const int n) // очистить бит
     if (n > -1 && n < BitLen)
         pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] & ~GetMemMask(n);
     else
-        throw "некорректный бит";
+        throw logic_error("Input error: incorrect bit length");
 }
 
 int TBitField::GetBit(const int n) const // получить значение бита
 {
   if (n > -1 && n < BitLen)
+  {
       if (pMem[GetMemIndex(n)] & GetMemMask(n))
-          return 1;
+          return (pMem[GetMemIndex(n)] & GetMemMask(n));
       else
           return 0;
+  }
   else
-      throw "некорректный бит";
+      throw logic_error("Input error: incorrect bit length");
 }
 
 // битовые операции
@@ -89,13 +94,10 @@ TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 {
     if (&bf == this)
         return *this;
-    if (pMem)
-        delete [] pMem;
     if (bf.pMem)
     {
         BitLen = bf.BitLen;
         MemLen = bf.MemLen;
-        pMem = new TELEM[MemLen];
         for (int i = 0; i < MemLen; i++)
         pMem[i] = bf.pMem[i];
     }
@@ -182,7 +184,7 @@ istream &operator>>(istream &istr, TBitField &bf) // ввод
     string tmp;
     istr >> tmp;
     if (tmp.size() != bf.GetLength())
-      throw "некоректная длина";
+      throw logic_error("Input error: incorrect length in the input");
     for (int i = 0; i < bf.BitLen; i++)
     {
       if (tmp[i] == '0')
@@ -191,7 +193,7 @@ istream &operator>>(istream &istr, TBitField &bf) // ввод
           if (tmp[i] == '1')
               bf.SetBit(i);
           else
-              throw "некоректный ввод";
+              throw ios_base::failure("Input error: incorrect input");
     }
     return istr;
 }
@@ -200,7 +202,10 @@ ostream &operator<<(ostream &ostr, const TBitField &bf) // вывод
 {
     for (int i = 0; i < bf.BitLen; i++)
     {
-        ostr << bf.GetBit(i) << " ";
+        if (bf.GetBit(i))
+          ostr << 1 << " ";
+        else
+          ostr << 0 << " ";
     }
     return ostr;
 }
