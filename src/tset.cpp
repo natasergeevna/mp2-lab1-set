@@ -129,11 +129,20 @@ istream &operator>>(istream &istr, TSet &s) // ввод
 ostream& operator<<(ostream &ostr, const TSet &s) // вывод
 {
     ostr << "{";
-    for (int i = 0; i < s.GetMaxPower(); i++)
+    int n = 0;
+    for (int i = 0; i < s.MaxPower; i++)
     {
-        if (s.IsMember(i))
+        if (s.BitField.GetBit(i))
         {
-            ostr << i << ", ";
+            if (n == 0)
+            {
+                ostr << i;
+                n = 1;
+            }
+            else
+            {
+                ostr << ", " << i;
+            }
         }
     }
     ostr << "}";

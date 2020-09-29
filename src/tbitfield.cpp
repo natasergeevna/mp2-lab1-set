@@ -22,7 +22,6 @@ TBitField::TBitField(int len)
     }
     else
         throw logic_error("Input error: incorrect length of BitField in constructor");
-
 }
 
 TBitField::TBitField(const TBitField &bf) // конструктор копирования
