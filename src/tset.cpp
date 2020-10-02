@@ -49,6 +49,24 @@ void TSet::DelElem(const int Elem) // исключение элемента мн
     BitField.ClrBit(Elem);
 }
 
+//доп.задание
+int TSet::sub(int number)
+ {
+     TSet subn(MaxPower+100);
+     cout << "какое число добавляем?" << endl;
+     int n;
+    cin >> n;
+     int k = 0;
+     for (int i = 0; i < MaxPower; i++)
+     {
+         if (IsMember(i))
+             subn.InsElem(i);
+         if (i == number)
+             subn.DelElem(i);
+     }
+     cout << "полученное множество: " << subn+n;
+     
+ }
 // теоретико-множественные операции
 
 TSet& TSet::operator=(const TSet &s) // присваивание
