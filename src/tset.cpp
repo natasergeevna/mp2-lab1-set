@@ -52,36 +52,35 @@ void TSet::DelElem(const int Elem) // исключение элемента мн
 //доп.задание
 int TSet::sub(int number)
  {
-     
      cout << "какое число добавляем?" << endl;
      int n;
-    cin >> n;
+     cin >> n;
      if (n >= MaxPower)
      {
          TSet subn(n+1);
          for (int i = 0; i < MaxPower; i++)
-         {
-             if (IsMember(i))
-                 subn.InsElem(i);
-             if (i == number)
-                 subn.DelElem(i);
-         }
+            {
+                if (IsMember(i))
+                    subn.InsElem(i);
+                if (i == number)
+                    subn.DelElem(i);
+            }
          cout << "полученное множество: " << subn+n;
      }
      else
      {
          TSet subn(MaxPower);
-     for (int i = 0; i < MaxPower; i++)
-     {
-         if (IsMember(i))
-             subn.InsElem(i);
-         if (i == number)
-             subn.DelElem(i);
-     }
-     cout << "полученное множество: " << subn+n;
+         for (int i = 0; i < MaxPower; i++)
+            {
+                if (IsMember(i))
+                    subn.InsElem(i);
+                if (i == number)
+                    subn.DelElem(i);
+            }
+         cout << "полученное множество: " << subn+n;
      
- }
- }
+     }
+}
 // теоретико-множественные операции
 
 TSet& TSet::operator=(const TSet &s) // присваивание
