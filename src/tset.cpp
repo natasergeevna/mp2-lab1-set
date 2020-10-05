@@ -52,11 +52,25 @@ void TSet::DelElem(const int Elem) // исключение элемента мн
 //доп.задание
 int TSet::sub(int number)
  {
-     TSet subn(MaxPower+100);
+     
      cout << "какое число добавляем?" << endl;
      int n;
     cin >> n;
-     int k = 0;
+     if (n >= MaxPower)
+     {
+         TSet subn(n+1);
+         for (int i = 0; i < MaxPower; i++)
+         {
+             if (IsMember(i))
+                 subn.InsElem(i);
+             if (i == number)
+                 subn.DelElem(i);
+         }
+         cout << "полученное множество: " << subn+n;
+     }
+     else
+     {
+         TSet subn(MaxPower);
      for (int i = 0; i < MaxPower; i++)
      {
          if (IsMember(i))
@@ -66,6 +80,7 @@ int TSet::sub(int number)
      }
      cout << "полученное множество: " << subn+n;
      
+ }
  }
 // теоретико-множественные операции
 
@@ -166,3 +181,26 @@ ostream& operator<<(ostream &ostr, const TSet &s) // вывод
     ostr << "}";
     return ostr;
 }
+
+/*int TSet::sub(int number)
+{
+    cout << "какое число добавляем?" << endl;
+    int n;
+   cin >> n;
+    Tset* subn;
+    if (n > MaxPower)
+          subn(n+1);
+    else
+        subn = new TSet(MaxPower);
+    int k = 0;
+    for (int i = 0; i < MaxPower; i++)
+    {
+        if (IsMember(i))
+            (*subn).InsElem(i);
+        if (i == number)
+            (*subn).DelElem(i);
+    }
+    cout << "полученное множество: " << subn+n;
+    
+}
+*/
